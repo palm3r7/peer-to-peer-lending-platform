@@ -1,0 +1,167 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.request-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f0e8;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.request-sidebar {
+  width: 250px;
+  background-color: #254b38;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.request-sidebar h2 {
+  font-size: 25px;
+  margin-bottom: 40px;
+}
+
+.request-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.request-sidebar nav a {
+  color: #e5eee7;
+  text-decoration: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.request-sidebar nav a:hover,
+.request-sidebar nav a.active {
+  background-color: #3c6b50;
+  color: white;
+}
+
+.request-logout {
+  margin-top: auto;
+  padding: 13px;
+  background-color: #e5eee7;
+  color: #254b38;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Main Content */
+.request-main {
+  flex: 1;
+  padding: 35px;
+}
+
+.request-header {
+  margin-bottom: 30px;
+}
+
+.request-header h1 {
+  color: #254b38;
+  margin-bottom: 8px;
+}
+
+.request-header p {
+  color: #777;
+}
+
+/* Form Card */
+.request-card {
+  background-color: white;
+  max-width: 750px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.request-card h2 {
+  color: #254b38;
+  margin-bottom: 8px;
+}
+
+.request-description {
+  color: #888;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+/* Form Fields */
+.request-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.request-form-group label {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 9px;
+  font-size: 14px;
+}
+
+.request-form-group input,
+.request-form-group select,
+.request-form-group textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+}
+
+.request-form-group input:focus,
+.request-form-group select:focus,
+.request-form-group textarea:focus {
+  border-color: #477653;
+}
+
+.request-form-group textarea {
+  resize: vertical;
+}
+
+/* Submit Button */
+.submit-request {
+  width: 100%;
+  padding: 14px;
+  background-color: #254b38;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-request:hover {
+  background-color: #3c6b50;
+}
+
+/* Responsive Design */
+@media (max-width: 650px) {
+  .request-container {
+    flex-direction: column;
+  }
+
+  .request-sidebar {
+    width: 100%;
+  }
+
+  .request-main {
+    padding: 20px;
+  }
+
+  .request-card {
+    padding: 20px;
+  }
+}
