@@ -1,0 +1,88 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.repayments-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f1e8;
+}
+
+/* Sidebar */
+.repayments-sidebar {
+  width: 250px;
+  background-color: #3b3028;
+  color: white;
+  padding: 25px 20px;
+}
+
+.repayments-sidebar h2 {
+  margin-bottom: 40px;
+  font-size: 25px;
+}
+
+.repayments-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.repayments-sidebar nav a {
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.repayments-sidebar nav a:hover,
+.repayments-sidebar nav a.active {
+  background-color: #8b7355;
+}
+
+/* Main Content */
+.repayments-main {
+  flex: 1;
+  padding: 35px;
+}
+
+.repayments-main h1 {
+  color: #3b3028;
+  margin-bottom: 10px;
+  font-size: 30px;
+}
+
+.repayments-main p {
+  color: #66594d;
+  margin-bottom: 15px;
+}
+
+/* Repayment Cards */
+.repayments-content {
+  display: flex;
+  gap: 25px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.repayment-card {
+  background-color: white;
+  padding: 25px;
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.repayment-card h3 {
+  color: #3b3028;
+  margin-bottom: 20px;
+}
+
+.repayment-card p {
+  color: #555;
+  margin-bottom: 15px;
+  font-size: 15px;
+}

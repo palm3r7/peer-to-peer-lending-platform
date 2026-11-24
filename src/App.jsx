@@ -4,6 +4,7 @@ import Register from './pages/register'
 import Dashboard from './pages/dashboard'
 import RequestLoan from './pages/requestloan'
 import MyLoans from "./pages/myloans";
+import BrowseLoans from './pages/browseloans'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="*" element={<Navigate to="/" />} />
       <Route path="/requestloan" element={<RequestLoan />} />
       <Route path="/myloans" element={<MyLoans />} />
+      <Route path="/browseloans" element={<BrowseLoans />} />
     </Routes>
   )
 }

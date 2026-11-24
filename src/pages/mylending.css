@@ -1,0 +1,154 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.mylend-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f3ef;
+}
+
+/* Sidebar */
+.mylending-sidebar {
+  width: 240px;
+  background-color: #292929;
+  color: white;
+  padding: 25px 20px;
+}
+
+.mylending-sidebar h2 {
+  margin-bottom: 40px;
+  color: #d6b98c;
+}
+
+.mylending-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mylending-sidebar nav a {
+  text-decoration: none;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.mylending-sidebar nav a:hover,
+.mylending-sidebar nav a.active {
+  background-color: #d6b98c;
+  color: #292929;
+}
+
+.mylending-logout {
+  margin-top: auto;
+  padding: 13px;
+  background-color: #e5eee7;
+  color: #254b38;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.mylending-logout:hover {
+  background-color: #d0dfd4;
+}
+
+
+/* Main Content */
+.lending-main {
+  flex: 1;
+  padding: 35px;
+}
+
+.lending-main h1 {
+  margin-bottom: 10px;
+  color: #292929;
+}
+
+.lending-main p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Summary Cards */
+.lending-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.lending-card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.lending-card h3 {
+  color: #777;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.lending-card h2 {
+  color: #292929;
+  font-size: 25px;
+}
+
+/* Loans Table */
+.lending-table-container {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.lending-table-container h2 {
+  margin-bottom: 20px;
+  color: #292929;
+}
+
+.lending-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lending-table-container th,
+.lending-table-container td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.lending-table-container th {
+  background-color: #f5f3ef;
+  color: #292929;
+}
+
+.lending-table-container td {
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lending-container {
+    flex-direction: column;
+  }
+
+  .lending-sidebar {
+    width: 100%;
+  }
+
+  .lending-cards {
+    flex-direction: column;
+  }
+
+  .lending-main {
+    padding: 20px;
+  }
+}

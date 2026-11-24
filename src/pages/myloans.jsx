@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Link } from "react-router-dom";
 import "./myloans.css";
 
@@ -33,48 +32,40 @@ function MyLoans() {
   ];
 
   return (
-    <div className="dashboard-container">
+    <div className="myloan-container">
 
       {/* Sidebar */}
-      <aside className="sidebar">
-
+      <aside className="myloans-sidebar">
         <h2>PeerLend</h2>
 
         <nav>
           <Link to="/dashboard">Dashboard</Link>
-
           <Link to="/browse-loans">Browse Loan Requests</Link>
-
           <Link to="/request-loan">Request a Loan</Link>
-
-          <Link to="/my-borrowing" className="active">
-            My Borrowing
-          </Link>
-
+          <Link to="/my-loans" className="active">My Borrowing</Link>
           <Link to="/my-lending">My Lending</Link>
-
           <Link to="/repayments">Repayments</Link>
-
           <Link to="/profile">My Profile</Link>
         </nav>
 
-        <button className="logout-button">
-          Logout
-        </button>
-
+        <button className="myloans-logout">Logout</button>
       </aside>
 
       {/* Main Content */}
-      <main className="dashboard-main">
+      <main className="my-loans-main">
 
-        <header className="dashboard-header">
+        <header className="loans-header">
           <div>
             <h1>My Loans</h1>
             <p>Track and manage your loan applications.</p>
           </div>
+
+          <Link to="/request-loan" className="new-loan-btn">
+            + Request New Loan
+          </Link>
         </header>
 
-        {/* Summary Cards */}
+        {/* Loan Summary */}
         <div className="loan-summary">
 
           <div className="summary-card">
@@ -98,19 +89,12 @@ function MyLoans() {
 
         </div>
 
-        {/* Loan Applications */}
+        {/* Loan Applications Table */}
         <div className="loans-table-container">
 
-          <div className="loans-header">
-            <h2>Loan Applications</h2>
-
-            <Link to="/request-loan" className="new-loan-btn">
-              + Request New Loan
-            </Link>
-          </div>
+          <h2>Loan Applications</h2>
 
           <table>
-
             <thead>
               <tr>
                 <th>Loan ID</th>
@@ -139,7 +123,6 @@ function MyLoans() {
                 </tr>
               ))}
             </tbody>
-
           </table>
 
         </div>
@@ -151,3 +134,4 @@ function MyLoans() {
 }
 
 export default MyLoans;
+
