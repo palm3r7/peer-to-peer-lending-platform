@@ -1,25 +1,27 @@
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 .mylend-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f3ef;
+  background-color: #f5f1e9;
 }
 
 /* Sidebar */
 .mylending-sidebar {
-  width: 240px;
-  background-color: #292929;
+  width: 250px;
+  background-color: #254b38;
   color: white;
-  padding: 25px 20px;
+  padding: 30px 20px;
 }
 
 .mylending-sidebar h2 {
   margin-bottom: 40px;
-  color: #d6b98c;
+  font-size: 25px;
 }
 
 .mylending-sidebar nav {
@@ -29,34 +31,35 @@
 }
 
 .mylending-sidebar nav a {
+  color: #e5eee7;
   text-decoration: none;
-  color: white;
-  padding: 12px;
-  border-radius: 6px;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
 .mylending-sidebar nav a:hover,
 .mylending-sidebar nav a.active {
-  background-color: #d6b98c;
-  color: #292929;
+  background-color: #3c6b50;
+  color: white;
 }
 
+/* Logout Button */
 .mylending-logout {
-  margin-top: auto;
-  padding: 13px;
-  background-color: #e5eee7;
-  color: #254b38;
+  margin-top: 35px;
+  width: 100%;
+  padding: 12px;
+  background-color: #3c6b50;
+  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
+  font-size: 15px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
 }
 
 .mylending-logout:hover {
-  background-color: #d0dfd4;
+  background-color: #527d62;
 }
-
 
 /* Main Content */
 .lending-main {
@@ -65,90 +68,53 @@
 }
 
 .lending-main h1 {
+  color: #254b38;
+  font-size: 30px;
   margin-bottom: 10px;
-  color: #292929;
 }
 
-.lending-main p {
-  color: #666;
+.lending-main > p {
+  color: #555;
+  font-size: 16px;
   margin-bottom: 30px;
 }
 
-/* Summary Cards */
-.lending-cards {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 35px;
-}
-
-.lending-card {
+/* Lending Content */
+.lending-content {
   background-color: white;
   padding: 25px;
   border-radius: 10px;
-  flex: 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.lending-card h3 {
-  color: #777;
-  font-size: 15px;
-  margin-bottom: 15px;
-}
-
-.lending-card h2 {
-  color: #292929;
-  font-size: 25px;
-}
-
-/* Loans Table */
-.lending-table-container {
-  background-color: white;
-  padding: 25px;
-  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
 }
 
-.lending-table-container h2 {
-  margin-bottom: 20px;
-  color: #292929;
+.lending-content h2 {
+  color: #254b38;
+  font-size: 22px;
+  margin-bottom: 25px;
 }
 
-.lending-table-container table {
+/* Table */
+.lending-content table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.lending-table-container th,
-.lending-table-container td {
-  padding: 15px;
   text-align: left;
-  border-bottom: 1px solid #eee;
 }
 
-.lending-table-container th {
-  background-color: #f5f3ef;
-  color: #292929;
+.lending-content th {
+  background-color: #254b38;
+  color: white;
+  padding: 15px;
+  font-size: 15px;
 }
 
-.lending-table-container td {
+.lending-content td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
   color: #555;
+  font-size: 14px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .lending-container {
-    flex-direction: column;
-  }
-
-  .lending-sidebar {
-    width: 100%;
-  }
-
-  .lending-cards {
-    flex-direction: column;
-  }
-
-  .lending-main {
-    padding: 20px;
-  }
+.lending-content tr:hover {
+  background-color: #f5f1e9;
 }

@@ -1,5 +1,5 @@
 
-import './mylending.css'
+import './browseloans.css'
 import { Link } from 'react-router-dom'
 
 function MyLending() {

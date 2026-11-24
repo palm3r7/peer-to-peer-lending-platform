@@ -8,15 +8,15 @@
 .repayments-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f1e8;
+  background-color: #f5f1e9;
 }
 
 /* Sidebar */
 .repayments-sidebar {
   width: 250px;
-  background-color: #3b3028;
+  background-color: #254b38;
   color: white;
-  padding: 25px 20px;
+  padding: 30px 20px;
 }
 
 .repayments-sidebar h2 {
@@ -27,36 +27,37 @@
 .repayments-sidebar nav {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .repayments-sidebar nav a {
-  color: white;
+  color: #e5eee7;
   text-decoration: none;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 13px;
+  border-radius: 8px;
   font-size: 16px;
 }
 
 .repayments-sidebar nav a:hover,
 .repayments-sidebar nav a.active {
-  background-color: #8b7355;
+  background-color: #3c6b50;
+  color: white;
 }
 
 /* Main Content */
 .repayments-main {
   flex: 1;
-  padding: 35px;
+  padding: 30px;
 }
 
 .repayments-main h1 {
-  color: #3b3028;
+  color: #254b38;
   margin-bottom: 10px;
   font-size: 30px;
 }
 
-.repayments-main p {
-  color: #66594d;
+.repayments-main > p {
+  color: #555;
   margin-bottom: 15px;
 }
 
@@ -77,7 +78,7 @@
 }
 
 .repayment-card h3 {
-  color: #3b3028;
+  color: #254b38;
   margin-bottom: 20px;
 }
 
