@@ -1,7 +1,35 @@
+
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './register.css';
+import './register.css'
 
 function Register() {
+
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [message, setMessage] = useState('')
+
+  function handleRegister(e) {
+    e.preventDefault()
+
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match')
+      return
+    }
+
+    setMessage('Registration successful!')
+
+    console.log({
+      fullName,
+      email,
+      phone,
+      password
+    })
+  }
+
   return (
     <div className="register-container">
 
@@ -13,13 +41,15 @@ function Register() {
           Join our lending platform today
         </p>
 
-        <form>
+        <form onSubmit={handleRegister}>
 
           <div className="register-form-group">
             <label>Full Name</label>
             <input
               type="text"
               placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               required
             />
           </div>
@@ -29,6 +59,8 @@ function Register() {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -38,6 +70,8 @@ function Register() {
             <input
               type="tel"
               placeholder="Enter your phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
             />
           </div>
@@ -47,6 +81,8 @@ function Register() {
             <input
               type="password"
               placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -56,6 +92,8 @@ function Register() {
             <input
               type="password"
               placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>
@@ -66,15 +104,18 @@ function Register() {
 
         </form>
 
+        <p>{message}</p>
+
         <p className="register-footer">
           Already have an account?
-          <a href="/"> Login</a>
+          <Link to="/"> Login</Link>
         </p>
 
       </div>
 
     </div>
-  );
+  )
 }
 
-export default Register;
+export default Register
+

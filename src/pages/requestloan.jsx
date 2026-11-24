@@ -1,7 +1,29 @@
+
 import './requestloan.css'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 function RequestLoan() {
+
+  const [amount, setAmount] = useState('')
+  const [purpose, setPurpose] = useState('')
+  const [period, setPeriod] = useState('')
+  const [description, setDescription] = useState('')
+  const [message, setMessage] = useState('')
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    setMessage('Your loan request has been submitted successfully!')
+
+    console.log({
+      amount,
+      purpose,
+      period,
+      description
+    })
+  }
+
   return (
     <div className="request-container">
 
@@ -39,7 +61,7 @@ function RequestLoan() {
             Provide accurate information about the amount you need.
           </p>
 
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form onSubmit={handleSubmit}>
 
             <div className="request-form-group">
               <label>Amount Required (KSh)</label>
@@ -47,14 +69,20 @@ function RequestLoan() {
                 type="number"
                 placeholder="e.g. 5000"
                 min="1"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
                 required
               />
             </div>
 
             <div className="request-form-group">
               <label>Purpose of Loan</label>
-              <select required defaultValue="">
-                <option value="" disabled>Select purpose</option>
+              <select
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                required
+              >
+                <option value="">Select purpose</option>
                 <option>Education</option>
                 <option>Business</option>
                 <option>Personal Expenses</option>
@@ -65,8 +93,12 @@ function RequestLoan() {
 
             <div className="request-form-group">
               <label>Repayment Period</label>
-              <select required defaultValue="">
-                <option value="" disabled>Select repayment period</option>
+              <select
+                value={period}
+                onChange={(e) => setPeriod(e.target.value)}
+                required
+              >
+                <option value="">Select repayment period</option>
                 <option value="1">1 Month</option>
                 <option value="2">2 Months</option>
                 <option value="3">3 Months</option>
@@ -80,6 +112,8 @@ function RequestLoan() {
               <textarea
                 rows="5"
                 placeholder="Explain why you need this loan..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 required
               />
             </div>
@@ -89,6 +123,9 @@ function RequestLoan() {
             </button>
 
           </form>
+
+          <p>{message}</p>
+
         </div>
 
       </main>
@@ -97,3 +134,4 @@ function RequestLoan() {
 }
 
 export default RequestLoan
+

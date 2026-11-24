@@ -1,8 +1,11 @@
 
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import "./myloans.css";
 
 function MyLoans() {
+
+  const [filter, setFilter] = useState("All");
 
   const loans = [
     {
@@ -30,6 +33,14 @@ function MyLoans() {
       status: "Rejected",
     },
   ];
+
+  const filteredLoans = loans.filter((loan) => {
+    if (filter === "All") {
+      return true;
+    }
+
+    return loan.status === filter;
+  });
 
   return (
     <div className="myloan-container">
@@ -94,6 +105,20 @@ function MyLoans() {
 
           <h2>Loan Applications</h2>
 
+          <div className="loan-filter">
+            <label>Filter by Status:</label>
+
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="All">All Loans</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+
           <table>
             <thead>
               <tr>
@@ -107,7 +132,7 @@ function MyLoans() {
             </thead>
 
             <tbody>
-              {loans.map((loan) => (
+              {filteredLoans.map((loan) => (
                 <tr key={loan.id}>
                   <td>#{loan.id}</td>
                   <td>KSh {loan.amount.toLocaleString()}</td>
@@ -122,6 +147,12 @@ function MyLoans() {
                   </td>
                 </tr>
               ))}
+
+              {filteredLoans.length === 0 && (
+                <tr>
+                  <td colSpan="6">No loan applications found.</td>
+                </tr>
+              )}
             </tbody>
           </table>
 
@@ -134,4 +165,5 @@ function MyLoans() {
 }
 
 export default MyLoans;
+
 

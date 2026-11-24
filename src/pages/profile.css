@@ -94,3 +94,32 @@
 .edit-profile-btn:hover {
   background-color: #3c6b50;
 }
+
+.profile-details input {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.profile-details p {
+  margin-bottom: 20px;
+}
+
+.edit-profile-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #254b38;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-profile-btn:hover {
+  background-color: #3c6b50;
+}
