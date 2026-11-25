@@ -1,6 +1,6 @@
 
 import './requestloan.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 function RequestLoan() {
@@ -11,17 +11,56 @@ function RequestLoan() {
   const [description, setDescription] = useState('')
   const [message, setMessage] = useState('')
 
-  function handleSubmit(e) {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    localStorage.removeItem('user')
+    navigate('/')
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    setMessage('Your loan request has been submitted successfully!')
+    const user = JSON.parse(localStorage.getItem('user'))
 
-    console.log({
-      amount,
-      purpose,
-      period,
-      description
-    })
+    if (!user) {
+      setMessage('Please log in before requesting a loan')
+      return
+    }
+
+    try {
+      const response = await fetch(
+        'http://localhost/peer%20to%20peer%20lending%20platform/backend/submitloan.php',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            borrower_id: user.user_id,
+            amount: amount,
+            purpose: purpose,
+            repayment_period: period,
+            description: description
+          })
+        }
+      )
+
+      const data = await response.json()
+
+      setMessage(data.message)
+
+      if (data.message === 'Your loan request has been submitted successfully!') {
+        setAmount('')
+        setPurpose('')
+        setPeriod('')
+        setDescription('')
+      }
+
+    } catch (error) {
+      setMessage('Could not connect to the server')
+      console.log(error)
+    }
   }
 
   return (
@@ -33,15 +72,20 @@ function RequestLoan() {
 
         <nav>
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/browse-loans">Browse Loan Requests</Link>
-          <Link to="/request-loan" className="active">Request a Loan</Link>
-          <Link to="/my-borrowing">My Borrowing</Link>
-          <Link to="/my-lending">My Lending</Link>
-          <Link to="/repayments">Repayments</Link>
+          <Link to="/browseloans">Browse Loan Requests</Link>
+          <Link to="/requestloan" className="active">Request a Loan</Link>
+          <Link to="/myloans">My Borrowing</Link>
+          <Link to="/mylending">My Lending</Link>
+          <Link to="/repayment">Repayments</Link>
           <Link to="/profile">My Profile</Link>
         </nav>
 
-        <button className="request-logout">Logout</button>
+        <button
+          className="request-logout"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </aside>
 
       {/* Main Content */}
@@ -57,6 +101,7 @@ function RequestLoan() {
         <div className="request-card">
 
           <h2>Loan Details</h2>
+
           <p className="request-description">
             Provide accurate information about the amount you need.
           </p>
@@ -134,4 +179,5 @@ function RequestLoan() {
 }
 
 export default RequestLoan
+
 

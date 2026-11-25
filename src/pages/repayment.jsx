@@ -1,176 +1,237 @@
 
 import './repayment.css'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 function Repayments() {
 
-  const [filter, setFilter] = useState('All')
+  const [repayments, setRepayments] = useState([])
+  const [paymentAmounts, setPaymentAmounts] = useState({})
+  const [paymentHistory, setPaymentHistory] = useState([])
 
-  const [repayments, setRepayments] = useState([
-    {
-      id: 1,
-      amount: 10000,
-      paid: 3000
-    },
-    {
-      id: 2,
-      amount: 5000,
-      paid: 5000
-    }
-  ])
+  const navigate = useNavigate()
 
-  // Calculate total amounts
-  const totalAmount = repayments.reduce((total, loan) => {
-    return total + loan.amount
-  }, 0)
+  const user = JSON.parse(localStorage.getItem('user'))
 
-  const totalPaid = repayments.reduce((total, loan) => {
-    return total + loan.paid
-  }, 0)
+  function fetchRepayments() {
 
-  const balance = totalAmount - totalPaid
+    if (user) {
 
-  // Filter repayments
-  const filteredRepayments = repayments.filter((loan) => {
-    const status = loan.paid === loan.amount ? 'Completed' : 'Ongoing'
+      fetch(`http://localhost/peer%20to%20peer%20lending%20platform/backend/getrepayments.php?user_id=${user.user_id}`)
+        .then(response => response.json())
+        .then(data => setRepayments(data))
+        .catch(error => console.log('Error fetching repayments:', error))
 
-    if (filter === 'All') {
-      return true
+      fetch(`http://localhost/peer%20to%20peer%20lending%20platform/backend/getpaymenthistory.php?user_id=${user.user_id}`)
+        .then(response => response.json())
+        .then(data => setPaymentHistory(data))
+        .catch(error => console.log('Error fetching payment history:', error))
+
     }
 
-    return status === filter
-  })
+  }
 
-  // Record a sample payment
-  function handlePayment(id) {
-    const updatedRepayments = repayments.map((loan) => {
-      if (loan.id === id) {
-        const remaining = loan.amount - loan.paid
+  useEffect(() => {
+    fetchRepayments()
+  }, [])
 
-        return {
-          ...loan,
-          paid: loan.paid + Math.min(1000, remaining)
-        }
-      }
+  const totalBorrowed = repayments.reduce(
+    (total, loan) => total + Number(loan.amount), 0
+  )
 
-      return loan
+  const totalPaid = repayments.reduce(
+    (total, loan) => total + Number(loan.paid), 0
+  )
+
+  const totalBalance = totalBorrowed - totalPaid
+
+  function handleLogout() {
+    localStorage.removeItem('user')
+    navigate('/')
+  }
+
+  function handlePayment(loanId) {
+
+    const amount = Number(paymentAmounts[loanId])
+
+    if (!amount || amount <= 0) {
+      alert('Please enter a valid payment amount')
+      return
+    }
+
+    fetch('http://localhost/peer%20to%20peer%20lending%20platform/backend/addrepayment.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        loan_id: loanId,
+        amount_paid: amount
+      })
     })
+      .then(response => response.json())
+      .then(data => {
 
-    setRepayments(updatedRepayments)
+        alert(data.message)
+
+        if (data.message === 'Payment recorded successfully') {
+
+          setPaymentAmounts({
+            ...paymentAmounts,
+            [loanId]: ''
+          })
+
+          fetchRepayments()
+
+        }
+
+      })
+      .catch(error => console.log('Error recording payment:', error))
+
   }
 
   return (
     <div className="repayments-container">
 
-      {/* Sidebar */}
       <aside className="repayments-sidebar">
+
         <h2>PeerLend</h2>
 
         <nav>
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/browse-loans">Browse Loan Requests</Link>
-          <Link to="/request-loan">Request a Loan</Link>
-          <Link to="/my-loans">My Borrowing</Link>
-          <Link to="/my-lending">My Lending</Link>
-          <Link to="/repayments" className="active">Repayments</Link>
-          <Link to="/profile">My Profile</Link>
+          <Link to="/browseloans">Browse Loan Requests</Link>
+          <Link to="/requestloan">Request Loan</Link>
+          <Link to="/myloans">My Borrowing</Link>
+          <Link to="/mylending">My Lending</Link>
+          <Link to="/repayment">Repayments</Link>
+          <Link to="/profile">Profile</Link>
         </nav>
+
+        <button className="repayments-logout" onClick={handleLogout}>
+          Logout
+        </button>
+
       </aside>
 
-      {/* Main Content */}
       <main className="repayments-main">
 
         <h1>Repayments</h1>
-        <p>View and manage your loan repayments.</p>
 
-        {/* Repayment Summary */}
-        <div className="repayment-summary">
+        <p>View and record your loan repayments.</p>
 
-          <div className="repayment-summary-card">
-            <h3>Total Loan Amount</h3>
-            <h2>KSh {totalAmount.toLocaleString()}</h2>
+        <div className="repayments-summary">
+
+          <div className="repayment-card">
+            <h3>Total Borrowed</h3>
+            <p>KSh {totalBorrowed.toLocaleString()}</p>
           </div>
 
-          <div className="repayment-summary-card">
-            <h3>Amount Paid</h3>
-            <h2>KSh {totalPaid.toLocaleString()}</h2>
+          <div className="repayment-card">
+            <h3>Total Paid</h3>
+            <p>KSh {totalPaid.toLocaleString()}</p>
           </div>
 
-          <div className="repayment-summary-card">
-            <h3>Outstanding Balance</h3>
-            <h2>KSh {balance.toLocaleString()}</h2>
+          <div className="repayment-card">
+            <h3>Remaining Balance</h3>
+            <p>KSh {totalBalance.toLocaleString()}</p>
           </div>
 
         </div>
 
-        <div className="repayments-content">
+        <div className="repayments-list">
 
-          <h2>My Loan Repayments</h2>
+          <h2>Loan Repayment Details</h2>
 
-          {/* Filter */}
-          <div className="repayment-filter">
+          {repayments.length === 0 ? (
 
-            <label>Filter by Status:</label>
+            <p>You have no active loans to repay.</p>
 
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="All">All Repayments</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Completed">Completed</option>
-            </select>
+          ) : (
 
-          </div>
+            repayments.map(loan => (
 
-          {filteredRepayments.map((loan) => {
+              <div className="repayment-item" key={loan.loan_id}>
 
-            const remaining = loan.amount - loan.paid
-
-            const status = remaining === 0 ? 'Completed' : 'Ongoing'
-
-            return (
-              <div className="repayment-card" key={loan.id}>
-
-                <h3>Loan Repayment {loan.id}</h3>
+                <h3>Loan #{loan.loan_id}</h3>
 
                 <p>
-                  Loan Amount: KSh {loan.amount.toLocaleString()}
+                  Loan Amount: KSh {Number(loan.amount).toLocaleString()}
                 </p>
 
                 <p>
-                  Amount Paid: KSh {loan.paid.toLocaleString()}
+                  Amount Paid: KSh {Number(loan.paid).toLocaleString()}
                 </p>
 
                 <p>
-                  Balance: KSh {remaining.toLocaleString()}
+                  Balance: KSh {
+                    (Number(loan.amount) - Number(loan.paid)).toLocaleString()
+                  }
                 </p>
 
-                <p>
-                  Status: {status}
-                </p>
+                {Number(loan.amount) > Number(loan.paid) && (
 
-                {remaining > 0 && (
-                  <button
-                    className="repayment-button"
-                    onClick={() => handlePayment(loan.id)}
-                  >
-                    Record KSh 1,000 Payment
-                  </button>
+                  <div>
+                    <input
+                      type="number"
+                      placeholder="Enter payment amount"
+                      value={paymentAmounts[loan.loan_id] || ''}
+                      onChange={(e) => setPaymentAmounts({
+                        ...paymentAmounts,
+                        [loan.loan_id]: e.target.value
+                      })}
+                    />
+
+                    <button onClick={() => handlePayment(loan.loan_id)}>
+                      Record Payment
+                    </button>
+                  </div>
+
+                )}
+
+                {Number(loan.amount) <= Number(loan.paid) && (
+                  <p>Loan fully repaid.</p>
                 )}
 
               </div>
-            )
-          })}
 
-          {filteredRepayments.length === 0 && (
-            <p>No repayment records found.</p>
+            ))
+
+          )}
+
+        </div>
+
+        <div className="payment-history">
+
+          <h2>Payment History</h2>
+
+          {paymentHistory.length === 0 ? (
+
+            <p>No payments have been recorded yet.</p>
+
+          ) : (
+
+            paymentHistory.map(payment => (
+
+              <div className="payment-history-item" key={payment.repayment_id}>
+
+                <h3>Loan #{payment.loan_id}</h3>
+
+                <p>
+                  Amount Paid: KSh {Number(payment.amount_paid).toLocaleString()}
+                </p>
+
+                <p>Payment Date: {payment.payment_date}</p>
+
+              </div>
+
+            ))
+
           )}
 
         </div>
 
       </main>
+
     </div>
   )
 }

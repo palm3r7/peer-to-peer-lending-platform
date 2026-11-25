@@ -1,125 +1,17 @@
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.profile-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f5f1e9;
-}
-
-/* Sidebar */
-.profile-sidebar {
-  width: 250px;
-  background-color: #254b38;
-  color: white;
-  padding: 30px 20px;
-}
-
-.profile-sidebar h2 {
-  margin-bottom: 40px;
-  font-size: 25px;
-}
-
-.profile-sidebar nav {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.profile-sidebar nav a {
-  color: #e5eee7;
-  text-decoration: none;
+/* Logout Button */
+.profile-logout {
+  width: 100%;
+  margin-top: 40px;
   padding: 13px;
+  background-color: #3c6b50;
+  color: white;
+  border: none;
   border-radius: 8px;
   font-size: 16px;
-}
-
-.profile-sidebar nav a:hover,
-.profile-sidebar nav a.active {
-  background-color: #3c6b50;
-  color: white;
-}
-
-/* Main Content */
-.profile-main {
-  flex: 1;
-  padding: 30px;
-}
-
-.profile-main h1 {
-  color: #254b38;
-  margin-bottom: 10px;
-  font-size: 30px;
-}
-
-.profile-main > p {
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* Profile Card */
-.profile-card {
-  background-color: white;
-  padding: 30px;
-  max-width: 600px;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-}
-
-.profile-card h2 {
-  color: #254b38;
-  margin-bottom: 25px;
-}
-
-.profile-details p {
-  color: #555;
-  margin-bottom: 20px;
-  font-size: 16px;
-}
-
-.edit-profile-btn {
-  background-color: #254b38;
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 15px;
+  text-align: left;
 }
 
-.edit-profile-btn:hover {
-  background-color: #3c6b50;
-}
-
-.profile-details input {
-  display: block;
-  width: 100%;
-  max-width: 400px;
-  padding: 10px;
-  margin-top: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 15px;
-}
-
-.profile-details p {
-  margin-bottom: 20px;
-}
-
-.edit-profile-btn {
-  margin-top: 20px;
-  padding: 12px 20px;
-  background-color: #254b38;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.edit-profile-btn:hover {
-  background-color: #3c6b50;
+.profile-logout:hover {
+  background-color: #496f57;
 }

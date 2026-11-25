@@ -1,0 +1,10 @@
+<?php
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Content-Type: application/json");
+
+echo json_encode([
+    "message" => "React is successfully connected to PHP!"
+]);
+
+?>

@@ -1,38 +1,71 @@
 
 import './browseloans.css'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 function BrowseLoans() {
 
   const [selectedLoan, setSelectedLoan] = useState('')
+  const [loans, setLoans] = useState([])
 
-  const loans = [
-    {
-      id: 1,
-      borrower: 'John Kamau',
-      amount: 5000,
-      purpose: 'Education',
-      period: '3 Months'
-    },
-    {
-      id: 2,
-      borrower: 'Mary Wanjiku',
-      amount: 10000,
-      purpose: 'Business',
-      period: '6 Months'
-    },
-    {
-      id: 3,
-      borrower: 'Peter Otieno',
-      amount: 3000,
-      purpose: 'Personal Expenses',
-      period: '2 Months'
-    }
-  ]
+  const navigate = useNavigate()
+
+  useEffect(() => {
+
+    fetch('http://localhost/peer%20to%20peer%20lending%20platform/backend/getloans.php')
+      .then(response => response.json())
+      .then(data => {
+        setLoans(data)
+      })
+      .catch(error => {
+        console.log('Error fetching loans:', error)
+      })
+
+  }, [])
+
+  function handleLogout() {
+    localStorage.removeItem('user')
+    navigate('/')
+  }
 
   function handleSelect(id) {
-    setSelectedLoan(id)
+
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (!user) {
+      alert('Please log in first')
+      return
+    }
+
+    fetch('http://localhost/peer%20to%20peer%20lending%20platform/backend/selectloan.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        request_id: id,
+        lender_id: user.user_id
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message)
+
+        if (data.message === 'Loan selected successfully') {
+          setSelectedLoan(id)
+
+          // Refresh the loan requests
+          fetch('http://localhost/peer%20to%20peer%20lending%20platform/backend/getloans.php')
+            .then(response => response.json())
+            .then(data => {
+              setLoans(data)
+            })
+        }
+      })
+      .catch(error => {
+        console.log('Error selecting loan:', error)
+      })
+
   }
 
   return (
@@ -44,15 +77,20 @@ function BrowseLoans() {
 
         <nav>
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/browse-loans" className="active">Browse Loan Requests</Link>
-          <Link to="/request-loan">Request a Loan</Link>
-          <Link to="/my-loans">My Borrowing</Link>
-          <Link to="/my-lending">My Lending</Link>
-          <Link to="/repayments">Repayments</Link>
+          <Link to="/browseloans" className="active">Browse Loan Requests</Link>
+          <Link to="/requestloan">Request a Loan</Link>
+          <Link to="/myloans">My Borrowing</Link>
+          <Link to="/mylending">My Lending</Link>
+          <Link to="/repayment">Repayments</Link>
           <Link to="/profile">My Profile</Link>
         </nav>
 
-        <button className="browseloans-logout">Logout</button>
+        <button
+          className="browseloans-logout"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
 
       </aside>
 
@@ -79,13 +117,13 @@ function BrowseLoans() {
 
             <tbody>
               {loans.map((loan) => (
-                <tr key={loan.id}>
-                  <td>{loan.borrower}</td>
+                <tr key={loan.request_id}>
+                  <td>{loan.borrower_name}</td>
                   <td>KSh {loan.amount}</td>
                   <td>{loan.purpose}</td>
-                  <td>{loan.period}</td>
+                  <td>{loan.repayment_period}</td>
                   <td>
-                    <button onClick={() => handleSelect(loan.id)}>
+                    <button onClick={() => handleSelect(loan.request_id)}>
                       Select
                     </button>
                   </td>
@@ -96,7 +134,9 @@ function BrowseLoans() {
           </table>
 
           {selectedLoan !== '' && (
-            <p> You selected loan request number {selectedLoan}. </p>
+            <p>
+              You selected loan request number {selectedLoan}.
+            </p>
           )}
 
         </div>
@@ -107,4 +147,3 @@ function BrowseLoans() {
 }
 
 export default BrowseLoans
-

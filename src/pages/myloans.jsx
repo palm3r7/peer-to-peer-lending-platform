@@ -1,38 +1,38 @@
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./myloans.css";
 
 function MyLoans() {
 
   const [filter, setFilter] = useState("All");
+  const [loans, setLoans] = useState([]);
 
-  const loans = [
-    {
-      id: 1,
-      amount: 10000,
-      purpose: "School Fees",
-      period: "3 Months",
-      date: "10 Nov 2026",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      amount: 15000,
-      purpose: "Business",
-      period: "6 Months",
-      date: "05 Nov 2026",
-      status: "Approved",
-    },
-    {
-      id: 3,
-      amount: 5000,
-      purpose: "Personal Expenses",
-      period: "2 Months",
-      date: "01 Nov 2026",
-      status: "Rejected",
-    },
-  ];
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (user) {
+
+      fetch(`http://localhost/peer%20to%20peer%20lending%20platform/backend/getmyloans.php?user_id=${user.user_id}`)
+        .then(response => response.json())
+        .then(data => {
+          setLoans(data);
+        })
+        .catch(error => {
+          console.log("Error fetching loans:", error);
+        });
+
+    }
+
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem('user');
+    navigate('/');
+  }
 
   const filteredLoans = loans.filter((loan) => {
     if (filter === "All") {
@@ -47,33 +47,42 @@ function MyLoans() {
 
       {/* Sidebar */}
       <aside className="myloans-sidebar">
+
         <h2>PeerLend</h2>
 
         <nav>
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/browse-loans">Browse Loan Requests</Link>
-          <Link to="/request-loan">Request a Loan</Link>
-          <Link to="/my-loans" className="active">My Borrowing</Link>
-          <Link to="/my-lending">My Lending</Link>
-          <Link to="/repayments">Repayments</Link>
+          <Link to="/browseloans">Browse Loan Requests</Link>
+          <Link to="/requestloan">Request a Loan</Link>
+          <Link to="/myloans" className="active">My Borrowing</Link>
+          <Link to="/mylending">My Lending</Link>
+          <Link to="/repayment">Repayments</Link>
           <Link to="/profile">My Profile</Link>
         </nav>
 
-        <button className="myloans-logout">Logout</button>
+        <button
+          className="myloans-logout"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+
       </aside>
 
       {/* Main Content */}
       <main className="my-loans-main">
 
         <header className="loans-header">
+
           <div>
             <h1>My Loans</h1>
             <p>Track and manage your loan applications.</p>
           </div>
 
-          <Link to="/request-loan" className="new-loan-btn">
+          <Link to="/requestloan" className="new-loan-btn">
             + Request New Loan
           </Link>
+
         </header>
 
         {/* Loan Summary */}
@@ -106,6 +115,7 @@ function MyLoans() {
           <h2>Loan Applications</h2>
 
           <div className="loan-filter">
+
             <label>Filter by Status:</label>
 
             <select
@@ -117,9 +127,11 @@ function MyLoans() {
               <option value="Approved">Approved</option>
               <option value="Rejected">Rejected</option>
             </select>
+
           </div>
 
           <table>
+
             <thead>
               <tr>
                 <th>Loan ID</th>
@@ -132,28 +144,43 @@ function MyLoans() {
             </thead>
 
             <tbody>
+
               {filteredLoans.map((loan) => (
-                <tr key={loan.id}>
-                  <td>#{loan.id}</td>
-                  <td>KSh {loan.amount.toLocaleString()}</td>
+
+                <tr key={loan.request_id}>
+
+                  <td>#{loan.request_id}</td>
+
+                  <td>
+                    KSh {Number(loan.amount).toLocaleString()}
+                  </td>
+
                   <td>{loan.purpose}</td>
-                  <td>{loan.period}</td>
-                  <td>{loan.date}</td>
+
+                  <td>{loan.repayment_period} months</td>
+
+                  <td>{loan.created_at}</td>
 
                   <td>
                     <span className={`loan-status ${loan.status.toLowerCase()}`}>
                       {loan.status}
                     </span>
                   </td>
+
                 </tr>
+
               ))}
 
               {filteredLoans.length === 0 && (
+
                 <tr>
                   <td colSpan="6">No loan applications found.</td>
                 </tr>
+
               )}
+
             </tbody>
+
           </table>
 
         </div>
@@ -165,5 +192,3 @@ function MyLoans() {
 }
 
 export default MyLoans;
-
-

@@ -148,3 +148,44 @@
 .repayment-button:hover {
   background-color: #3c6b50;
 }
+/* Logout Button */
+.repayments-logout {
+  width: 100%;
+  margin-top: 40px;
+  padding: 13px;
+  background-color: #3c6b50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.repayments-logout:hover {
+  background-color: #496f57;
+}
+
+.payment-history {
+  margin-top: 30px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.payment-history h2 {
+  margin-bottom: 20px;
+}
+
+.payment-history-item {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.payment-history-item h3 {
+  margin-bottom: 10px;
+}
+
+.payment-history-item p {
+  margin: 8px 0;
+}

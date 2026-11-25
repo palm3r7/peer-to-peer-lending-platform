@@ -11,13 +11,39 @@ function Login() {
 
   const navigate = useNavigate()
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault()
 
-    if (email === 'test@gmail.com' && password === '12345') {
-      navigate('/dashboard')
-    } else {
-      setMessage('Invalid email or password')
+    try {
+      const response = await fetch(
+        'http://localhost/peer%20to%20peer%20lending%20platform/backend/login.php',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        }
+      )
+
+      const data = await response.json()
+
+      if (data.message === 'Login successful!') {
+
+        localStorage.setItem('user', JSON.stringify(data.user))
+
+        navigate('/dashboard')
+
+      } else {
+        setMessage(data.message)
+      }
+
+    } catch (error) {
+      setMessage('Could not connect to the server')
+      console.log(error)
     }
   }
 
@@ -75,4 +101,3 @@ function Login() {
 }
 
 export default Login
-

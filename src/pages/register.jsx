@@ -12,7 +12,7 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState('')
 
-  function handleRegister(e) {
+  async function handleRegister(e) {
     e.preventDefault()
 
     if (password !== confirmPassword) {
@@ -20,14 +20,31 @@ function Register() {
       return
     }
 
-    setMessage('Registration successful!')
+    try {
+      const response = await fetch(
+        'http://localhost/peer%20to%20peer%20lending%20platform/backend/registration.php',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            full_name: fullName,
+            email: email,
+            phone_number: phone,
+            password: password
+          })
+        }
+      )
 
-    console.log({
-      fullName,
-      email,
-      phone,
-      password
-    })
+      const data = await response.json()
+
+      setMessage(data.message)
+
+    } catch (error) {
+      setMessage('Could not connect to the server')
+      console.log(error)
+    }
   }
 
   return (
@@ -118,4 +135,5 @@ function Register() {
 }
 
 export default Register
+
 

@@ -1,31 +1,53 @@
 
 import './dashboard.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 function Dashboard() {
 
-  // Sample borrowing records
-  const borrowedLoans = [
-    { id: 1, amount: 10000, status: 'Pending' },
-    { id: 2, amount: 15000, status: 'Approved' },
-    { id: 3, amount: 5000, status: 'Rejected' }
-  ]
+  const [borrowedLoans, setBorrowedLoans] = useState([])
+  const [lending, setLending] = useState([])
 
-  // Sample lending records
-  const lending = [
-    { id: 1, amount: 5000 },
-    { id: 2, amount: 8000 },
-    { id: 3, amount: 3000 }
-  ]
+  const navigate = useNavigate()
+
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  useEffect(() => {
+
+    if (user) {
+
+      // Get borrowing records
+      fetch(`http://localhost/peer%20to%20peer%20lending%20platform/backend/getmyloans.php?user_id=${user.user_id}`)
+        .then(response => response.json())
+        .then(data => {
+          setBorrowedLoans(data)
+        })
+        .catch(error => {
+          console.log('Error fetching borrowing records:', error)
+        })
+
+      // Get lending records
+      fetch(`http://localhost/peer%20to%20peer%20lending%20platform/backend/getmylending.php?lender_id=${user.user_id}`)
+        .then(response => response.json())
+        .then(data => {
+          setLending(data)
+        })
+        .catch(error => {
+          console.log('Error fetching lending records:', error)
+        })
+
+    }
+
+  }, [])
 
   // Calculate total borrowed
   const totalBorrowed = borrowedLoans
     .filter(loan => loan.status === 'Approved')
-    .reduce((total, loan) => total + loan.amount, 0)
+    .reduce((total, loan) => total + Number(loan.amount), 0)
 
   // Calculate total lent
   const totalLent = lending.reduce(
-    (total, loan) => total + loan.amount, 0
+    (total, loan) => total + Number(loan.amount), 0
   )
 
   // Count active loans
@@ -38,12 +60,26 @@ function Dashboard() {
     loan => loan.status === 'Pending'
   ).length
 
-  // Sample recent activities
+  // Logout function
+  function handleLogout() {
+    localStorage.removeItem('user')
+    navigate('/')
+  }
+
+  // Recent activities
   const activities = [
-    'You submitted a loan request of KSh 10,000.',
-    'Your loan request of KSh 15,000 was approved.',
-    'You lent KSh 5,000 to John Kamau.'
+    ...borrowedLoans.map(loan => ({
+      text: `You submitted a loan request of KSh ${Number(loan.amount).toLocaleString()}. Status: ${loan.status}`,
+      date: loan.created_at
+    })),
+
+    ...lending.map(loan => ({
+      text: `You lent KSh ${Number(loan.amount).toLocaleString()} to ${loan.borrower_name}.`,
+      date: loan.created_at
+    }))
   ]
+
+  activities.sort((a, b) => new Date(b.date) - new Date(a.date))
 
   return (
     <div className="dashboard-container">
@@ -54,15 +90,17 @@ function Dashboard() {
 
         <nav>
           <Link to="/dashboard" className="active">Dashboard</Link>
-          <Link to="/browse-loans">Browse Loan Requests</Link>
-          <Link to="/request-loan">Request a Loan</Link>
-          <Link to="/my-loans">My Borrowing</Link>
-          <Link to="/my-lending">My Lending</Link>
-          <Link to="/repayments">Repayments</Link>
+          <Link to="/browseloans">Browse Loan Requests</Link>
+          <Link to="/requestloan">Request a Loan</Link>
+          <Link to="/myloans">My Borrowing</Link>
+          <Link to="/mylending">My Lending</Link>
+          <Link to="/repayment">Repayments</Link>
           <Link to="/profile">My Profile</Link>
         </nav>
 
-        <button className="logout-button">Logout</button>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </aside>
 
       {/* Main Dashboard */}
@@ -75,8 +113,10 @@ function Dashboard() {
           </div>
 
           <div className="user-profile">
-            <span>U</span>
-            <p>User</p>
+            <span>
+              {user ? user.full_name.charAt(0).toUpperCase() : 'U'}
+            </span>
+            <p>{user ? user.full_name : 'User'}</p>
           </div>
         </header>
 
@@ -114,8 +154,8 @@ function Dashboard() {
           <h2>Quick Actions</h2>
 
           <div className="quick-actions">
-            <Link to="/request-loan">+ Request a Loan</Link>
-            <Link to="/browse-loans">Browse Loan Requests</Link>
+            <Link to="/requestloan">+ Request a Loan</Link>
+            <Link to="/browseloans">Browse Loan Requests</Link>
           </div>
         </section>
 
@@ -124,9 +164,15 @@ function Dashboard() {
           <h2>Recent Activity</h2>
 
           <div className="activity-box">
-            {activities.map((activity, index) => (
-              <p key={index}>{activity}</p>
-            ))}
+
+            {activities.length > 0 ? (
+              activities.slice(0, 5).map((activity, index) => (
+                <p key={index}>{activity.text}</p>
+              ))
+            ) : (
+              <p>No recent activities.</p>
+            )}
+
           </div>
         </section>
 
